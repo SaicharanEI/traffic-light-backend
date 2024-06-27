@@ -7,8 +7,10 @@ import { BadRequestsException } from "./exceptions/bad-requests"
 export const errorHandler = (method: Function) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
+            console.log("error handler called")
             await method(req, res, next)
         } catch(error: any) {
+            console.log(error, "error from error handler")
             let exception: HttpException;
             if( error instanceof HttpException) {
                 exception = error;
