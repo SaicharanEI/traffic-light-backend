@@ -1,5 +1,6 @@
 import {z} from "zod"
 export const TrafficLightScheduleSchema = z.object({
+    id: z.number().optional(),
     timePeriod: z.string(),
     startTime: z.string(),
     endTime: z.string(),
@@ -9,8 +10,8 @@ export const TrafficLightScheduleSchema = z.object({
   });
   
   export const TrafficLightSchema = z.object({
-    name: z.string(),
-    location: z.string().email(),
-    currentColor: z.string(),
     schedules: z.array(TrafficLightScheduleSchema),
+    name: z.string(),
+    location: z.string(),
+    currentColor: z.string(),
   });
