@@ -14,9 +14,7 @@ export const AddTrafficLight = async (
   next: NextFunction
 ) => {
   try {
-    const parsedBody = TrafficLightSchema.parse(req.body);
-    const schedules = TrafficLightScheduleSchema.parse(req.body.schedules);
-    const { name, location, currentColor } = parsedBody;
+    const { name, location, currentColor, schedules } = req.body;
     const trafficlight = await prismaClient.trafficLight.create({
       data: {
         name,
@@ -241,7 +239,7 @@ export const updateTrafficLightCurrentColor = async (
   res: Response
 ) => {
   const { id } = req.params;
-  const color = req.query.color;
+  const { color } = req.body;
   console.log(id, color,  "update traffic light called");
   const trafficlight = await prismaClient.trafficLight.update({
     where: {

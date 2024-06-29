@@ -10,9 +10,11 @@ const validationMiddleware = (schema : Schema
     try {
       const parsedData = schema.parse(req.body);
       req.body = parsedData;
+      console.log(req.body)
       next();
     } catch (err: any) {
       const error = fromZodError(err);
+      console.log(error);
       return next(new ErrorHandler(error.message, 400));
     }
   };
