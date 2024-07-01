@@ -14,12 +14,13 @@ datasource db {
 }
 
 model TrafficLight {
-  id           Int                    @id @default(autoincrement())
-  name         String
-  location     String
-  currentColor String
-  schedules    TrafficLightSchedule[]
-  status       Boolean                @default(false)
+  id            Int                    @id @default(autoincrement())
+  name          String
+  location      String
+  currentColor  String
+  timeRemaining Int                    @default(10)
+  schedules     TrafficLightSchedule[]
+  status        Boolean                @default(false)
 }
 
 model TrafficLightSchedule {

@@ -197,6 +197,7 @@ export const getTrafficLightsList = async (
         },
       },
     });
+    console.log(trafficlights, "traffic light");
     res.status(200).json({ data: trafficlights });
   } catch (error: any) {
     next(
