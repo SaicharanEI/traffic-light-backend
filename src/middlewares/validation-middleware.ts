@@ -10,11 +10,11 @@ const validationMiddleware = (schema : Schema
     try {
       const parsedData = schema.parse(req.body);
       req.body = parsedData;
-      console.log(req.body)
+      console.log(req.body, "from validaton middleware middleware");
       next();
     } catch (err: any) {
       const error = fromZodError(err);
-      console.log(error);
+      console.log(error.message, "message from validation middleware");
       return next(new ErrorHandler(error.message, 400));
     }
   };

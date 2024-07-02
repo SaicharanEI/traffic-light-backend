@@ -19,6 +19,7 @@ model TrafficLight {
   location      String
   currentColor  String
   timeRemaining Int                    @default(10)
+  isAutomatic   Boolean                @default(true)
   schedules     TrafficLightSchedule[]
   status        Boolean                @default(false)
 }

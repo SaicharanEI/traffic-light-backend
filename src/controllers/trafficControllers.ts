@@ -1,9 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { prismaClient } from "..";
-import {
-  TrafficLightScheduleSchema,
-  TrafficLightSchema,
-} from "../schema/trafficlight";
+import { prismaClient } from "..";;
 import { ErrorCode } from "../exceptions/root";
 import { NotFoundException } from "../exceptions/not-found";
 import { BadRequestsException } from "../exceptions/bad-requests";
@@ -235,6 +231,32 @@ export const deleteSchedule = async (
   }
 };
 
+
+export const changeAutomaticModeById = async (
+  req: Request,
+  res: Response
+)=>{
+  const { id } = req.params;
+  console.log(req.body, "body")
+  const { mode, color} = req.body;
+  console.log(id, mode,  "update traffic light called");
+  // const time = mode === true? 0 : 10
+  
+  const trafficlight = await prismaClient.trafficLight.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      isAutomatic: mode,
+      currentColor: color,
+      // timeRemaining: time
+    },
+  });
+  res.status(200).json({
+    message: "Traffic light state changed successfully",
+    data: trafficlight,
+  });
+}
 export const updateTrafficLightCurrentColor = async (
   req: Request,
   res: Response
