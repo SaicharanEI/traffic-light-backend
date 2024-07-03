@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { prismaClient } from "..";;
+import { prismaClient } from "../prisma";
 import { ErrorCode } from "../exceptions/root";
-import { NotFoundException } from "../exceptions/not-found";
-import { BadRequestsException } from "../exceptions/bad-requests";
+import { NotFoundException } from "../exceptions/not-found.exception";
+import { BadRequestsException } from "../exceptions/bad-requests.exception";
 
 export const AddTrafficLight = async (
   req: Request,
@@ -30,13 +30,14 @@ export const AddTrafficLight = async (
       data: trafficlight,
     });
   } catch (error: any) {
+    console.log(error);
     next(
       new BadRequestsException(error.message, error.errorCode, error.errors)
     );
   }
 };
 
-export const updateTrafficLightDetails = async (
+export const UpdateTrafficLight = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -144,7 +145,7 @@ export const DeleteTrafficLight = async (
   }
 };
 
-export const getTrafficLight = async (
+export const GetTrafficLightById = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -175,7 +176,7 @@ export const getTrafficLight = async (
   }
 };
 
-export const getTrafficLightsList = async (
+export const GetTrafficLightsList = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -202,7 +203,7 @@ export const getTrafficLightsList = async (
   }
 };
 
-export const deleteSchedule = async (
+export const DeleteSchedule = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -232,7 +233,7 @@ export const deleteSchedule = async (
 };
 
 
-export const changeAutomaticModeById = async (
+export const ChangeTrafficLightModeById = async (
   req: Request,
   res: Response
 )=>{
@@ -257,23 +258,23 @@ export const changeAutomaticModeById = async (
     data: trafficlight,
   });
 }
-export const updateTrafficLightCurrentColor = async (
-  req: Request,
-  res: Response
-) => {
-  const { id } = req.params;
-  const { color } = req.body;
-  console.log(id, color,  "update traffic light called");
-  const trafficlight = await prismaClient.trafficLight.update({
-    where: {
-      id: Number(id),
-    },
-    data: {
-      currentColor: color?.toString(),
-    },
-  });
-  res.status(200).json({
-    message: "Traffic light updated successfully",
-    data: trafficlight,
-  });
-};
+// export const updateTrafficLightCurrentColor = async (
+//   req: Request,
+//   res: Response
+// ) => {
+//   const { id } = req.params;
+//   const { color } = req.body;
+//   console.log(id, color,  "update traffic light called");
+//   const trafficlight = await prismaClient.trafficLight.update({
+//     where: {
+//       id: Number(id),
+//     },
+//     data: {
+//       currentColor: color?.toString(),
+//     },
+//   });
+//   res.status(200).json({
+//     message: "Traffic light updated successfully",
+//     data: trafficlight,
+//   });
+// };

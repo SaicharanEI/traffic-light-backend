@@ -27,8 +27,8 @@ model TrafficLight {
 model TrafficLightSchedule {
   id             Int          @id @default(autoincrement())
   timePeriod     String
-  startTime      String
-  endTime        String
+  startTime      DateTime
+  endTime        DateTime
   redDuration    Int
   yellowDuration Int
   greenDuration  Int

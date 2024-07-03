@@ -1,22 +1,21 @@
 import express, { Express, Request, Response } from "express";
-import { PORT } from "./secrets";
-import { trafficRoute } from "./routes/trafficRoute";
-import { PrismaClient } from "@prisma/client";
-import { errorMiddleware } from "./middlewares/error";
 import cors from "cors"
-const app: Express = express();
 
-app.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});
+import { PORT } from "./secrets";
+import { errorMiddleware } from "./middlewares/error";
+import { rootRouter } from "./routes";
+
+const app: Express = express();
 
 app.use(express.json());
 app.use(cors())
-export const prismaClient = new PrismaClient({
-    log:['query']
-})
 
-app.use("/api/v1", trafficRoute);
+app.use("/api/v1", rootRouter);
 app.use(errorMiddleware);
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!");
 })
+
+
+app.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});

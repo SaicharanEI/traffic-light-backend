@@ -12,6 +12,8 @@ export class HttpException extends Error {
         this.errorCode = errorCode
         this.statusCode = statusCode
         this.errors = error
+        Error.captureStackTrace(this, this.constructor);
+
     }
 }
 
@@ -21,3 +23,4 @@ export enum ErrorCode {
     SCHEDULE_NOT_FOUND  = 5002,
     UNPROCESSABLE_ENTITY = 2001
 }
+
