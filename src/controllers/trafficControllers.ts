@@ -240,7 +240,7 @@ export const changeAutomaticModeById = async (
   console.log(req.body, "body")
   const { mode, color} = req.body;
   console.log(id, mode,  "update traffic light called");
-  // const time = mode === true? 0 : 10
+  const time = mode === true? 10 : 0
   
   const trafficlight = await prismaClient.trafficLight.update({
     where: {
@@ -249,7 +249,7 @@ export const changeAutomaticModeById = async (
     data: {
       isAutomatic: mode,
       currentColor: color,
-      // timeRemaining: time
+      timeRemaining: time
     },
   });
   res.status(200).json({
