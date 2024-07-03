@@ -1,20 +1,22 @@
 import { Router } from "express";
 import { errorHandler } from "../error-handler";
-import { AddTrafficLight, ChangeTrafficLightModeById, DeleteSchedule, DeleteTrafficLight, GetTrafficLightById, GetTrafficLightsList, UpdateTrafficLight } from "../controllers/traffic.controller";
-import ValidationMiddleware from "../middlewares/validation-middleware";
-import { TrafficLightPostSchema } from "../schema/traffic-light-post.schema";
-import { TrafficLightUpdateSchema } from "../schema/traffic-light-update.schema";
+import validationMiddleware from "../middlewares/validation-middleware";
+import { trafficLightPostSchema } from "../schema/traffic-light-post.schema";
+import { trafficLightUpdateSchema } from "../schema/traffic-light-update.schema";
+import { paramsSchema } from "../schema/params.schema";
+import { changeModeSchema } from "../schema/change-mode.schema";
+import { addTrafficLight, changeTrafficLightModeById, deleteSchedule, deleteTrafficLight, getTrafficLightById, getTrafficLightsList, updateTrafficLight } from "../controllers/traffic.controller";
 
 const trafficRoute: Router = Router();
 
-trafficRoute.get("/", errorHandler(GetTrafficLightsList))
-trafficRoute.get("/:id", errorHandler(GetTrafficLightById))
-trafficRoute.post("/",ValidationMiddleware(TrafficLightPostSchema) ,errorHandler(AddTrafficLight))
-trafficRoute.put("/:id", ValidationMiddleware(TrafficLightUpdateSchema) ,errorHandler(UpdateTrafficLight))
-trafficRoute.delete("/:id", errorHandler(DeleteTrafficLight))
+trafficRoute.get("/", errorHandler(getTrafficLightsList))
+trafficRoute.get("/:id", validationMiddleware(paramsSchema) , errorHandler(getTrafficLightById))
+trafficRoute.post("/", validationMiddleware(trafficLightPostSchema) ,errorHandler(addTrafficLight))
+trafficRoute.put("/:id", validationMiddleware(trafficLightUpdateSchema) ,errorHandler(updateTrafficLight))
+trafficRoute.delete("/:id", validationMiddleware(paramsSchema), errorHandler(deleteTrafficLight))
 
-trafficRoute.delete("/schedule/:id", errorHandler(DeleteSchedule))
-trafficRoute.put("/:id/change-mode", errorHandler(ChangeTrafficLightModeById))
+trafficRoute.delete("/schedule/:id", validationMiddleware(paramsSchema), errorHandler(deleteSchedule))
+trafficRoute.put("/:id/change-mode", validationMiddleware(changeModeSchema), errorHandler(changeTrafficLightModeById))
 
 
 export { trafficRoute };

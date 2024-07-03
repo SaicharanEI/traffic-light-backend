@@ -3,5 +3,4 @@ import { trafficRoute } from "./traffic.route";
 
 export const rootRouter: Router = Router()
 
-rootRouter.use("/traffic-lights", trafficRoute);
-rootRouter.use("/schedules", trafficRoute);
+rootRouter.use("/traffic-light", trafficRoute);

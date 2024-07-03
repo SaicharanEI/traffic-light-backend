@@ -4,9 +4,9 @@ export class HttpException extends Error {
     message: string;
     errorCode: any;
     statusCode: number;
-    errors: ErrorCode;
+    errors: errorCode;
 
-    constructor(message:string, errorCode: ErrorCode, statusCode:number, error: any) {
+    constructor(message:string, errorCode: errorCode, statusCode:number, error: any) {
         super(message)
         this.message = message
         this.errorCode = errorCode
@@ -17,7 +17,7 @@ export class HttpException extends Error {
     }
 }
 
-export enum ErrorCode {
+export enum errorCode {
     INTERNAL_EXCEPTION= 3001,
     LIGHT_NOT_FOUND = 5001,
     SCHEDULE_NOT_FOUND  = 5002,
