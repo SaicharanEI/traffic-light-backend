@@ -1,10 +1,12 @@
 import { NextFunction, Request, Response } from "express";
 import { prismaClient } from "../prisma";
-import { CreateTrafficType } from "../types/create-traffic.type";
 import { UpdateTrafficType } from "../types/update-traffic.type";
+import { CreateTrafficType } from "../types/create-traffic.type";
+import { ParamsType } from "../types/params.type";
+import { ChangeTrafficLightModeType } from "../types/change-mode-traffic.type";
 
 export const addTrafficLight = async (
-  req: Request<null, null, CreateTrafficType["body"]>,
+  req: Request<CreateTrafficType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -30,7 +32,7 @@ export const addTrafficLight = async (
 };
 
 export const updateTrafficLight = async (
-  req: Request,
+  req: Request<UpdateTrafficType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -85,7 +87,6 @@ export const updateTrafficLight = async (
         },
       });
 
-    
     res.status(200).json({
       message: "Traffic light updated successfully",
       data: trafficLightWithSchedules,
@@ -94,7 +95,7 @@ export const updateTrafficLight = async (
 };
 
 export const deleteTrafficLight = async (
-  req: Request,
+  req: Request<ParamsType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -115,7 +116,7 @@ export const deleteTrafficLight = async (
 };
 
 export const getTrafficLightById = async (
-  req: Request,
+  req: Request<ParamsType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -137,7 +138,7 @@ export const getTrafficLightById = async (
 };
 
 export const getTrafficLightsList = async (
-  req: Request,
+  req: Request<ParamsType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -158,7 +159,7 @@ export const getTrafficLightsList = async (
 };
 
 export const deleteSchedule = async (
-  req: Request,
+  req: Request<ParamsType>,
   res: Response,
   next: NextFunction
 ) => {
@@ -179,7 +180,7 @@ export const deleteSchedule = async (
 
 
 export const changeTrafficLightModeById = async (
-  req: Request,
+  req: Request<ChangeTrafficLightModeType>,
   res: Response
 )=>{
   const { id } = req.params;

@@ -2,4 +2,13 @@ import { z } from "zod";
 
 import { trafficLightUpdateSchema } from "../schema/traffic-light-update.schema";
 
-export type UpdateTrafficType = z.infer<typeof trafficLightUpdateSchema>;
+// export type UpdateTrafficType = z.infer<typeof trafficLightUpdateSchema.shape.body>;
+
+export type UpdateTrafficParamsType = z.infer<typeof trafficLightUpdateSchema.shape.params>;
+export type UpdateTrafficBodyType = z.infer<typeof trafficLightUpdateSchema.shape.body>;
+
+export interface UpdateTrafficType {
+  id: UpdateTrafficParamsType;
+  body: UpdateTrafficBodyType;
+}
+
