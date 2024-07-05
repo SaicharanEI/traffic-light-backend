@@ -10,25 +10,25 @@ export const addTrafficLight = async (
   res: Response,
   next: NextFunction
 ) => {
-    const { name, location, currentColor, schedules } = req.body;
-    const trafficlight = await prismaClient.trafficLight.create({
-      data: {
-        name,
-        location,
-        currentColor: currentColor ?? "red",
-        schedules: {
-          create: schedules,
-        },
+  const { name, location, currentColor, schedules } = req.body;
+  const trafficlight = await prismaClient.trafficLight.create({
+    data: {
+      name,
+      location,
+      currentColor: currentColor ?? "red",
+      schedules: {
+        create: schedules,
       },
-      include: {
-        schedules: true, // Include schedules in the response
-      },
-    });
+    },
+    include: {
+      schedules: true,
+    },
+  });
 
-    res.status(201).json({
-      message: "Traffic light created successfully",
-      data: trafficlight,
-    });
+  res.status(201).json({
+    message: "Traffic light created successfully",
+    data: trafficlight,
+  });
 };
 
 export const updateTrafficLight = async (
@@ -38,60 +38,56 @@ export const updateTrafficLight = async (
 ) => {
   const { id } = req.params;
 
-    const trafficLightId = Number(id);
-    const { name, location, currentColor, schedules } = req.body;
-    await prismaClient.trafficLight.update({
-      where: { id: trafficLightId },
-      data: { name, location, currentColor },
-    });
-    
-    // Update schedules
-    for (const schedule of schedules) {
-      if (schedule.id !== undefined) {
-        await prismaClient.trafficLightSchedule.update({
-          where: { id: schedule.id },
-          data: {
-            timePeriod: schedule.timePeriod,
-            startTime: schedule.startTime,
-            endTime: schedule.endTime,
-            redDuration: schedule.redDuration,
-            yellowDuration: schedule.yellowDuration,
-            greenDuration: schedule.greenDuration,
-          },
-        });
-      } else {
-        await prismaClient.trafficLightSchedule.create({
-          data: {
-            timePeriod: schedule.timePeriod,
-            startTime: schedule.startTime,
-            endTime: schedule.endTime,
-            redDuration: schedule.redDuration,
-            yellowDuration: schedule.yellowDuration,
-            greenDuration: schedule.greenDuration,
-            trafficLightId: trafficLightId,
-          },
-        });
-      }
-    }
+  const trafficLightId = Number(id);
+  const { name, location, currentColor, schedules } = req.body;
+  await prismaClient.trafficLight.update({
+    where: { id: trafficLightId },
+    data: { name, location, currentColor },
+  });
 
-    // Fetch the updated traffic light with the latest schedules
-    const trafficLightWithSchedules =
-      await prismaClient.trafficLight.findUnique({
-        where: { id: trafficLightId },
-        include: {
-          schedules: {
-            where: {
-              status: false,
-            },
-          },
+  for (const schedule of schedules) {
+    if (schedule.id !== undefined) {
+      await prismaClient.trafficLightSchedule.update({
+        where: { id: schedule.id },
+        data: {
+          timePeriod: schedule.timePeriod,
+          startTime: schedule.startTime,
+          endTime: schedule.endTime,
+          redDuration: schedule.redDuration,
+          yellowDuration: schedule.yellowDuration,
+          greenDuration: schedule.greenDuration,
         },
       });
+    } else {
+      await prismaClient.trafficLightSchedule.create({
+        data: {
+          timePeriod: schedule.timePeriod,
+          startTime: schedule.startTime,
+          endTime: schedule.endTime,
+          redDuration: schedule.redDuration,
+          yellowDuration: schedule.yellowDuration,
+          greenDuration: schedule.greenDuration,
+          trafficLightId: trafficLightId,
+        },
+      });
+    }
+  }
 
-    res.status(200).json({
-      message: "Traffic light updated successfully",
-      data: trafficLightWithSchedules,
-    });
-  
+  const trafficLightWithSchedules = await prismaClient.trafficLight.findUnique({
+    where: { id: trafficLightId },
+    include: {
+      schedules: {
+        where: {
+          status: false,
+        },
+      },
+    },
+  });
+
+  res.status(200).json({
+    message: "Traffic light updated successfully",
+    data: trafficLightWithSchedules,
+  });
 };
 
 export const deleteTrafficLight = async (
@@ -100,19 +96,18 @@ export const deleteTrafficLight = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-    const trafficlight = await prismaClient.trafficLight.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        status: true,
-      },
-    });
-    res.status(200).json({
-      message: "Traffic light deleted successfully",
-      trafficlight,
-    });
-  
+  const trafficlight = await prismaClient.trafficLight.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: true,
+    },
+  });
+  res.status(200).json({
+    message: "Traffic light deleted successfully",
+    trafficlight,
+  });
 };
 
 export const getTrafficLightById = async (
@@ -121,20 +116,19 @@ export const getTrafficLightById = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-    const trafficlight = await prismaClient.trafficLight.findUnique({
-      where: {
-        id: Number(id),
-      },
-      include: {
-        schedules: {
-          where: {
-            status: false,
-          },
+  const trafficlight = await prismaClient.trafficLight.findUnique({
+    where: {
+      id: Number(id),
+    },
+    include: {
+      schedules: {
+        where: {
+          status: false,
         },
       },
-    });
-    res.status(200).json({ data: trafficlight });
-
+    },
+  });
+  res.status(200).json({ data: trafficlight });
 };
 
 export const getTrafficLightsList = async (
@@ -142,20 +136,19 @@ export const getTrafficLightsList = async (
   res: Response,
   next: NextFunction
 ) => {
-    const trafficlights = await prismaClient.trafficLight.findMany({
-      where: {
-        status: false,
-      },
-      include: {
-        schedules: {
-          where: {
-            status: false,
-          },
+  const trafficlights = await prismaClient.trafficLight.findMany({
+    where: {
+      status: false,
+    },
+    include: {
+      schedules: {
+        where: {
+          status: false,
         },
       },
-    });
-    res.status(200).json({ data: trafficlights });
-  
+    },
+  });
+  res.status(200).json({ data: trafficlights });
 };
 
 export const deleteSchedule = async (
@@ -164,29 +157,27 @@ export const deleteSchedule = async (
   next: NextFunction
 ) => {
   const { id } = req.params;
-    const schedule = await prismaClient.trafficLightSchedule.update({
-      where: {
-        id: Number(id),
-      },
-      data: {
-        status: true,
-      },
-    });
-    res.status(200).json({
-      message: "Schedule deleted successfully",
-      schedule,
-    });
+  const schedule = await prismaClient.trafficLightSchedule.update({
+    where: {
+      id: Number(id),
+    },
+    data: {
+      status: true,
+    },
+  });
+  res.status(200).json({
+    message: "Schedule deleted successfully",
+    schedule,
+  });
 };
-
 
 export const changeTrafficLightModeById = async (
   req: Request<ChangeTrafficLightModeType>,
   res: Response
-)=>{
+) => {
   const { id } = req.params;
-  const { mode, color} = req.body;
-  const time = mode === true? 10 : 0
-  console.log(id, color,mode,  "change traffic light called");
+  const { mode, color } = req.body;
+  const time = mode === true ? 10 : 0;
   const trafficlight = await prismaClient.trafficLight.update({
     where: {
       id: Number(id),
@@ -194,34 +185,11 @@ export const changeTrafficLightModeById = async (
     data: {
       isAutomatic: mode,
       currentColor: color,
-      timeRemaining: time
+      timeRemaining: time,
     },
   });
   res.status(200).json({
     message: "Traffic light state changed successfully",
     data: trafficlight,
   });
-}
-
-
-
-// export const updateTrafficLightCurrentColor = async (
-//   req: Request,
-//   res: Response
-// ) => {
-//   const { id } = req.params;
-//   const { color } = req.body;
-//   console.log(id, color,  "update traffic light called");
-//   const trafficlight = await prismaClient.trafficLight.update({
-//     where: {
-//       id: Number(id),
-//     },
-//     data: {
-//       currentColor: color?.toString(),
-//     },
-//   });
-//   res.status(200).json({
-//     message: "Traffic light updated successfully",
-//     data: trafficlight,
-//   });
-// };
+};
